@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Attrape le Caca</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #111;
+      font-family: Arial, sans-serif;
+     
+    }
+
+    #game-area {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #poop {
+      font-size: 50px;
+      position: absolute;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-size: 20px;
+      z-index: 10;
+    }
+
+    #victory {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: gold;
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    #timer {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: white;
+      font-size: 20px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="game-area">
+    <div id="score">Score : 0</div>
+    <div id="timer">Temps : 0.0s</div>
+    <div id="poop">💩</div>
+    <div id="victory"></div>
+  </div>
+
+  <script>
+    const poop = document.getElementById('poop');
+    const scoreDisplay = document.getElementById('score');
+    const timerDisplay = document.getElementById('timer');
+    const victoryMessage = document.getElementById('victory');
+
+    let score = 0;
+    let gameOver = false;
+    let time = 0.0;
+
+    // Timer toutes les 100ms
+    const timerInterval = setInterval(() => {
+      if (!gameOver) {
+        time += 0.1;
+        timerDisplay.textContent = "Temps : " + time.toFixed(1) + "s";
+      }
+    }, 100);
+
+    function movePoop() {
+      if (gameOver) return;
+
+      const maxX = window.innerWidth - 50;
+      const maxY = window.innerHeight - 50;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      poop.style.left = randomX + 'px';
+      poop.style.top = randomY + 'px';
+    }
+
+    poop.addEventListener('click', () => {
+      if (gameOver) return;
+      score++;
+      scoreDisplay.textContent = "Score : " + score;
+      poop.style.display = "none";
+      gameOver = true;
+      clearInterval(timerInterval);
+      victoryMessage.style.display = "block";
+      victoryMessage.innerHTML = `🎉 Bravo, tu as attrapé le caca en <br><strong>${time.toFixed(1)} secondes</strong> !`;
+    });
+
+    // Vitesse rapide
+    const moveInterval = setInterval(() => {
+      movePoop();
+    }, 500);
+
+    movePoop();
+  </script>
+
+</body>
+</html>
