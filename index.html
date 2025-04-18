@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attrape le Caca</title>
   <style>
     body {
@@ -9,7 +10,6 @@
       overflow: hidden;
       background-color: #111;
       font-family: Arial, sans-serif;
-     
     }
 
     #game-area {
@@ -25,10 +25,25 @@
       user-select: none;
     }
 
+    @media (max-width: 600px) {
+      #poop {
+        font-size: 70px;
+      }
+    }
+
     #score {
       position: absolute;
       top: 10px;
       left: 10px;
+      color: white;
+      font-size: 20px;
+      z-index: 10;
+    }
+
+    #timer {
+      position: absolute;
+      top: 10px;
+      right: 10px;
       color: white;
       font-size: 20px;
       z-index: 10;
@@ -44,15 +59,7 @@
       font-size: 30px;
       font-weight: bold;
       text-align: center;
-    }
-
-    #timer {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      color: white;
-      font-size: 20px;
-      z-index: 10;
+      z-index: 20;
     }
   </style>
 </head>
@@ -95,7 +102,7 @@
       poop.style.top = randomY + 'px';
     }
 
-    poop.addEventListener('click', () => {
+    function attraperCaca() {
       if (gameOver) return;
       score++;
       scoreDisplay.textContent = "Score : " + score;
@@ -104,9 +111,11 @@
       clearInterval(timerInterval);
       victoryMessage.style.display = "block";
       victoryMessage.innerHTML = `🎉 Bravo, tu as attrapé le caca en <br><strong>${time.toFixed(1)} secondes</strong> !`;
-    });
+    }
 
-    // Vitesse rapide
+    poop.addEventListener('click', attraperCaca);
+    poop.addEventListener('touchstart', attraperCaca);
+
     const moveInterval = setInterval(() => {
       movePoop();
     }, 500);
